@@ -7,7 +7,7 @@ from src.core.config import settings
 from src.database.db import Base
 
 # import all models
-from src.models import user, payslip, logs
+from src.models import user, payslip, logs , policy
 
 
 config = context.config
