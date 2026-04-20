@@ -19,7 +19,7 @@ app = FastAPI(title="Payroll Query and Management System")
 
 
 # Base.metadata.drop_all(bind=engine)   # drops all tables
-Base.metadata.create_all(bind=engine) # create tables
+# Base.metadata.create_all(bind=engine) # create tables
 
 app.include_router(auth.router)
 app.include_router(user_routes.router)
