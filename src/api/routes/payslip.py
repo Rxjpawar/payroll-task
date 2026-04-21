@@ -11,6 +11,8 @@ import os
 from src.models.payslip import Payslip
 from src.utils.dependencies import get_current_user
 from src.models.payslip import Payslip
+from src.models.user import User
+from src.services.payslip_service import delete_payslip_service
 router = APIRouter(prefix="/payslip", tags=["Payslip"])
 
 
@@ -72,3 +74,12 @@ def download_payslip(
         media_type="application/pdf",
         filename=f"payslip_{payslip.month}_{payslip.year}.pdf"
     )
+
+
+@router.delete("/{payslip_id}")
+def delete_payslip(
+    payslip_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return delete_payslip_service(payslip_id, current_user, db)

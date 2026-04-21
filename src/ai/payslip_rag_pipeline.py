@@ -10,7 +10,7 @@ client = OpenAI(
     base_url="https://api.groq.com/openai/v1"
 )
 
-
+ 
 def build_context(docs):
     context_parts = []
 
