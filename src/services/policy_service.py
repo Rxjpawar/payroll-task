@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from src.models.policy import Policy
 from src.schemas.policy import PolicyCreate
 from src.ai.indexing import index_policy
+from src.core.redis_client import redis_client
 
 def upload_policy_service(data:PolicyCreate,pdf_path:str,db:Session):
     policy=Policy(
@@ -20,5 +21,8 @@ def upload_policy_service(data:PolicyCreate,pdf_path:str,db:Session):
     }
 
     index_policy(pdf_path,metadata)
+    keys = redis_client.keys("policy:*")
+    if keys:
+        redis_client.delete(*keys)
 
     return policy

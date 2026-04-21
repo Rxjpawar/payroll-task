@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from src.ai.vector_store import policy_qdrant_store
 
+from src.utils.cache import generate_cache_key,get_cached_response,set_cached_response
+
 load_dotenv()
 
 client = OpenAI(
@@ -71,6 +73,15 @@ Context:
 
 
 def run_policy_rag_pipeline(query: str):
+    cache_key = f"policy:{query.strip().lower()}"
+
+    cached = get_cached_response(cache_key)
+    if cached:
+        print("policy Cache Hit horaaaaa")
+        return cached["response"]
+
+    print("policy cache miss hogaaya lol")
+
     docs = retrieve_docs(query)
 
     if not docs:
@@ -79,5 +90,6 @@ def run_policy_rag_pipeline(query: str):
     context = build_context(docs)
 
     answer = generate_answer(query, context)
-
+    print("saving the cache")
+    set_cached_response(cache_key, {"response": answer})
     return answer
