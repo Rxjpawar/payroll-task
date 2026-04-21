@@ -12,4 +12,4 @@ class Log(Base):
     response_time = Column(Float)
 
     ai_response = Column(Text, nullable=True)
-    request_query = Column(Text, nullable=True)  # optional upgrade
+    request_query = Column(Text, nullable=True)
