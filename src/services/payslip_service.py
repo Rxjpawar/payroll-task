@@ -7,6 +7,7 @@ from src.ai.vector_store import payslip_qdrant_store
 from src.utils.cache import invalidate_user_cache
 from fastapi import HTTPException
 from qdrant_client.models import Filter, FieldCondition, MatchValue
+from src.core.redis_client import redis_client
 
 def upload_payslip_service(data:PayslipCreate,pdf_path:str,db:Session):
     payslip = Payslip(
@@ -31,7 +32,9 @@ def upload_payslip_service(data:PayslipCreate,pdf_path:str,db:Session):
     }
 
     index_payslip(pdf_path, metadata)
-
+    keys = redis_client.keys("paysip:*")
+    if keys:
+        redis_client.delete(*keys)
     return payslip
 
 

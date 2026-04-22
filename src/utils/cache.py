@@ -1,8 +1,8 @@
 import json
 from src.core.redis_client import redis_client
+from src.core.config import settings
 
-CACHE_TTL = 300  #(5 minutes paryant cache rahil)
-
+CACHE_TTL = settings.CACHE_TTL #(5 minutes paryant cache rahil)
 
 def generate_cache_key(user_id: str, query: str) -> str:
     return f"rag:{user_id}:{query.lower().strip()}"
@@ -14,10 +14,8 @@ def get_cached_response(key: str):
         return json.loads(data)
     return None
 
-
 def set_cached_response(key: str, value: dict):
     redis_client.setex(key, CACHE_TTL, json.dumps(value))
-
 
 def invalidate_user_cache(user_id: str):
     pattern = f"rag:{user_id}:*"

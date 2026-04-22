@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from src.ai.vector_store import payslip_qdrant_store
+from src.utils.cache import generate_cache_key,get_cached_response,set_cached_response
 
 load_dotenv()
 
@@ -70,13 +71,19 @@ Context:
 
 
 def run_rag_pipeline(query: str, user_id: str):
+    cache_key = generate_cache_key(user_id, query)
     docs = retrieve_docs(query, user_id)
+    cached=get_cached_response(cache_key)
+    if cached:
+        print("payslip hitttt")
+        return cached["response"]
+    print("payslip cache miss ")
 
     if not docs:
         return "No relevant payroll records found."
 
     context = build_context(docs)
-
+    print("saving the cache")
     answer = generate_answer(query, context)
-
+    set_cached_response(cache_key,{"response":answer})
     return answer
