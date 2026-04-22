@@ -4,7 +4,9 @@ from src.schemas.policy import PolicyCreate
 from src.ai.indexing import index_policy
 from src.core.redis_client import redis_client
 from fastapi import HTTPException
+from qdrant_client.models import Filter, FieldCondition, MatchValue
 from src.ai.vector_store import policy_qdrant_store
+
 def upload_policy_service(data:PolicyCreate,pdf_path:str,db:Session):
     policy=Policy(
         name=data.name,
@@ -42,3 +44,23 @@ def upload_policy_service(data:PolicyCreate,pdf_path:str,db:Session):
     
 #     vector_store = policy_qdrant_store()
 
+#     vector_store.client.delete(
+#         collection_name="policy_vectors",
+#         points_selector=Filter(
+#             must=[
+#                 FieldCondition(
+#                     key="",
+#                     match=MatchValue()
+#                 ),
+#                 FieldCondition(
+#                     key="",
+#                     match=MatchValue()
+#                 ),
+#                 FieldCondition(
+#                     key="",
+#                     match=MatchValue()
+#                 ),
+#             ]
+
+#         )
+#     )
