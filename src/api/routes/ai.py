@@ -12,7 +12,7 @@ class QueryRequest(BaseModel):
     query: str
 
 
-@router.post("/psyslip/ask")
+@router.post("/payslip/ask")
 def ask_ai(
     request: QueryRequest,
     current_user: User = Depends(get_current_user)
